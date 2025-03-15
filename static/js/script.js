@@ -21,3 +21,22 @@ menuItems.forEach(item => {
     }
   });
 });
+
+// Animar todos os itens da página que tiverem atributo data-anime
+const itens = document.querySelectorAll('[data-anime]');
+
+const animeScroll = () => {
+  const windowTop = window.pageYOffset + (window.innerHeight * 3) / 4;
+
+  itens.forEach(item => {
+    if (windowTop > item.offsetTop) {
+      item.classList.add('animate');
+    } else {
+      item.classList.remove('animate');
+    }
+  });
+}
+
+window.addEventListener('scroll', () => {
+  animeScroll();
+});
