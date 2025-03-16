@@ -27,3 +27,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+  create-pr-develop:
+    name: Create Pull Request to Develop
+    needs: validate-flask
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+          branch: staging
+          title: "Automated PR: Staging → Develop"
+          commit-message: "Automated PR to merge staging into develop"
+          body: "This is an automated PR to merge the latest changes from staging into develop."
+          draft: false
+          delete-branch: false
+          always-create: true
+          labels: "automated-pr"
