@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - staging
-  pull_request:
-    types: [closed]
-    branches:
-      - develop
-      - main
 
 permissions:
   contents: write
@@ -20,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
@@ -29,41 +27,3 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-  create-pr-develop:
-    name: Create Pull Request to Develop
-    needs: validate-flask
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
-
-    steps:
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
-          branch: staging
-          title: "Automated PR to merge staging into develop"
-          commit-message: "Automated PR to merge staging into develop"
-          body: "This is an automated PR to merge staging into develop"
-          draft: false
-          always-create: true
-
-  create-pr-main:
-    name: Create Pull Request to Main
-    needs: validate-flask
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
-
-    steps:
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: develop
-          title: "Automated PR to merge develop into main"
-          commit-message: "Automated PR to merge develop into main"
-          body: "This is an automated PR to merge develop into main"
-          draft: false
-          always-create: true
