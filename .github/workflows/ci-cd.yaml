@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Garante que todo o histórico da branch seja mantido
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
@@ -46,8 +48,10 @@ jobs:
           branch: staging
           title: "Automated PR: Staging → Develop"
           commit-message: "Automated PR to merge staging into develop"
-          body: "This is an automated PR to merge the latest changes from staging into develop."
+          body: "This PR foi criado automaticamente para mesclar staging em develop. Favor revisar antes de aprovar."
           draft: false
           delete-branch: false
+          assignees: ${{ github.actor }}
+          reviewers: ${{ github.actor }}
+          labels: "auto-generated"
           always-create: true
-          labels: "automated-pr"
