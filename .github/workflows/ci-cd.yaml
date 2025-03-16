@@ -20,12 +20,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.before }}
-          fetch-depth: 0 # Fetch all history for accurate results
-
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
@@ -43,12 +37,6 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.before }}
-          fetch-depth: 0 # Fetch all history for accurate results
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
@@ -68,12 +56,6 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.before }}
-          fetch-depth: 0 # Fetch all history for accurate results
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
