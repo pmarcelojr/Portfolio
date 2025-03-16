@@ -294,10 +294,10 @@ margin-bottom: -35px;
 }
   
 #alerta {
-position: fixed;
-z-index: 10;
-top: 30px;
-right: 30px;
+    position: fixed;
+    z-index: 10;
+    top: 30px;
+    right: 30px;
 }
 
 #footer{
